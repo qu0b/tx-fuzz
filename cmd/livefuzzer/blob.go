@@ -88,7 +88,7 @@ func SendBlobTransactions(client *rpc.Client, key *ecdsa.PrivateKey, f *filler.F
 			panic(err)
 		}
 		if err := client.CallContext(context.Background(), nil, "eth_sendRawTransaction", hexutil.Encode(rlpData)); err != nil {
-			panic(err)
+			log.Error("error sending transaction: %v", err)
 		}
 		lastTx = signedTx
 		time.Sleep(10 * time.Millisecond)
