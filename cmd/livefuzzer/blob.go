@@ -6,10 +6,7 @@ import (
 	"fmt"
 	"math/big"
 	"math/rand"
-<<<<<<< HEAD
-=======
 	"strings"
->>>>>>> marius/master
 	"sync"
 	"time"
 
