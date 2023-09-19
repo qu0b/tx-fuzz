@@ -6,6 +6,10 @@ import (
 	"fmt"
 	"math/big"
 	"math/rand"
+<<<<<<< HEAD
+=======
+	"strings"
+>>>>>>> marius/master
 	"sync"
 	"time"
 
@@ -88,9 +92,13 @@ func SendBlobTransactions(client *rpc.Client, key *ecdsa.PrivateKey, f *filler.F
 			panic(err)
 		}
 		if err := client.CallContext(context.Background(), nil, "eth_sendRawTransaction", hexutil.Encode(rlpData)); err != nil {
-			log.Error("error sending transaction: %v", err)
-			time.Sleep(24 * time.Second)
-			return
+			if strings.Contains(err.Error(), "account limit exceeded") {
+				// Back off for a bit if we send a lot of transactions at once
+				time.Sleep(1 * time.Minute)
+				continue
+			} else {
+				panic(err)
+			}
 		}
 		lastTx = signedTx
 		time.Sleep(10 * time.Millisecond)
